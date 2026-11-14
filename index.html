@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KuaduSocial | Social Media Manager</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+*{box-sizing:border-box}
+body{margin:0;background:#f5f6fb;color:#24263b;font-family:'DM Sans',sans-serif;font-size:13px}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.sidebar{position:fixed;top:0;bottom:0;left:0;width:235px;background:#111426;color:white;padding:24px 16px;display:flex;flex-direction:column;z-index:5}
+.brand{font:700 21px 'Space Grotesk';padding:0 7px 27px;color:white}
+.brand span{color:#a18cff}
+.brand b{display:inline-grid;place-items:center;background:linear-gradient(135deg,#a18cff,#6848e8);width:30px;height:30px;border-radius:9px;margin-right:7px}
+.workspace{display:flex;align-items:center;gap:10px;background:#1d2036;border:1px solid #30334a;border-radius:10px;padding:10px;margin-bottom:28px}
+.workspace i{font-style:normal;background:#6e5bd5;border-radius:8px;width:30px;height:30px;display:grid;place-items:center}
+.workspace small{display:block;color:#999db2;font-size:9px;margin-top:4px}
+.sidebar label{font-size:9px;letter-spacing:1.2px;color:#747a91;font-weight:bold;padding:0 9px 10px}
+nav{display:grid;gap:4px}
+nav button{border:0;background:none;text-align:left;color:#aeb2c7;border-radius:7px;padding:11px;font-size:11px}
+nav button.active,nav button:hover{background:#292546;color:white}
+.channels{margin-top:27px}
+.channels div{padding:10px;color:#c0c3d3;font-size:10px}
+.side-bottom{margin-top:auto}
+.help{background:#25223e;border-radius:10px;padding:13px;margin-bottom:15px;font-size:10px}
+.help p{color:#a5a8bb}
+.user{border-top:1px solid #2a2d42;padding-top:13px;display:flex;align-items:center;gap:9px}
+.user i{font-style:normal;background:#f2c8a7;color:#553b35;border-radius:50%;padding:9px}
+.user small{display:block;color:#999db2;font-size:9px}
+main{margin-left:235px;padding:0 32px 40px}
+header{height:67px;border-bottom:1px solid #e9ebf2;display:flex;align-items:center;justify-content:space-between;color:#9699aa;font-size:11px}
+.top-right{display:flex;align-items:center;gap:18px}
+.avatar{background:#f2c8a7;color:#553b35;border-radius:50%;padding:8px}
+.view{display:none;padding-top:28px}
+.view.show{display:block}
+.welcome,.title{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.eyebrow{font-size:9px;letter-spacing:1.3px;color:#9988dc;font-weight:700}
+h1{font:700 26px 'Space Grotesk';margin:7px 0 4px}
+.welcome p,.title p{font-size:11px;color:#9699aa;margin:0}
+.primary{background:linear-gradient(135deg,#8469ed,#6e53db);color:white;border:0;border-radius:8px;padding:11px 15px;font-size:10px;font-weight:bold}
+.outline{background:white;border:1px solid #e5e6ee;border-radius:8px;padding:10px 14px;color:#5d6177}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:16px}
+.stats article,.panel{background:white;border:1px solid #eceef4;border-radius:11px;box-shadow:0 3px 14px #29305a05}
+.stats article{padding:15px;min-height:120px}
+.stats small,.panel small{font-size:9px;color:#999cad}
+.stats article>b{display:block;font:700 23px 'Space Grotesk';margin-top:9px}
+.stats p{font-size:9px;color:#a0a2b0;margin:5px 0}
+.stats p strong{color:#20b889}
+.columns{display:grid;grid-template-columns:1.5fr 1fr;gap:14px;margin-bottom:15px}
+.panel{padding:17px}
+.panel-head{display:flex;justify-content:space-between;align-items:center}
+.panel h2{font:700 13px 'Space Grotesk';margin:0 0 4px}
+.link{border:0;background:none;color:#7962db;font-size:9px;font-weight:bold}
+.chart-total{display:flex;align-items:center;gap:9px;margin:18px 0}
+.chart-total b{font:700 21px 'Space Grotesk'}
+.chart-total strong{font-size:9px;color:#20b889;background:#e8f8f1;padding:4px 6px;border-radius:5px}
+.chart{height:150px;position:relative;background:repeating-linear-gradient(to bottom,transparent 0,transparent 36px,#eff0f5 37px)}
+.chart svg{width:100%;height:100%}
+.channel{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #f0f1f5}
+.channel i{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-style:normal;background:#f0edff;color:#755bdc;font-weight:bold}
+.channel div{flex:1}
+.channel b{display:block;font-size:10px}
+.channel small{display:block;font-size:8px}
+.channel strong{font-size:10px}
+.channel em{font-style:normal;color:#20b889;font-size:9px}
+.add{width:100%;margin-top:12px;padding:10px;border:1px dashed #d9d4f5;border-radius:7px;background:#faf9ff;color:#7b65dd;font-size:9px;font-weight:bold}
+.post,.upcoming{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #f0f1f5}
+.thumb{width:36px;height:36px;border-radius:8px;display:grid;place-items:center;font-style:normal;background:#ddd4ff}
+.post div,.upcoming div{flex:1}
+.post b,.upcoming strong{display:block;font-size:9px}
+.post small,.upcoming small{display:block;font-size:8px;color:#a0a2b0;margin-top:4px}
+.post em,.upcoming em{font-style:normal;font-size:8px;background:#e8f8f1;color:#24a77e;padding:5px 7px;border-radius:5px}
+.upcoming>b{width:35px;height:38px;border-radius:7px;background:#f3f0ff;color:#775fe0;display:grid;place-items:center}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);margin-top:20px}
+.calendar div{height:130px;padding:10px;border:1px solid #eee;font-size:9px;color:#999}
+.calendar b{display:block;color:#333;margin:10px 0}
+.event{background:#f0edff;color:#6852ca;padding:7px;border-radius:4px;margin:5px 0}
+.inbox{display:grid;grid-template-columns:300px 1fr;padding:0;min-height:430px;overflow:hidden}
+.messages{border-right:1px solid #eee}
+.messages h2{padding:17px}
+.messages button{width:100%;padding:15px;border:0;border-top:1px solid #eee;background:white;text-align:left;font-size:10px}
+.messages button b,.messages button small{display:block;margin-left:30px}
+.messages button small{font-size:8px;color:#999;margin-top:5px}
+.conversation{display:flex;flex-direction:column}
+.conversation-head{padding:16px;border-bottom:1px solid #eee}
+.conversation-head small{display:block;margin-top:5px}
+.chat{padding:20px;flex:1;background:#fcfcfe}
+.chat p{max-width:75%;padding:10px;border-radius:10px;font-size:9px;line-height:1.6}
+.received{background:#f0f1f6}
+.sent{background:#7660dd;color:white;margin-left:auto}
+.conversation form{display:flex;padding:12px;gap:8px}
+.conversation input{flex:1;border:1px solid #eee;border-radius:7px;padding:10px}
+.conversation form button{border:0;background:#7659e8;color:white;border-radius:7px;padding:0 14px}
+.growth{margin-top:15px;height:260px}
+.bars{height:170px;display:flex;align-items:end;gap:3%;padding:20px 5% 0}
+.bars i{flex:1;background:linear-gradient(#9a85f1,#7459df);border-radius:5px 5px 0 0}
+.media-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+.media{height:150px;border-radius:9px;display:grid;place-items:center;font-size:30px;position:relative;background:#c9baf9}
+.media small{position:absolute;bottom:0;left:0;right:0;background:#fff;padding:9px;font-size:8px;color:#777}
+.backdrop{display:none;position:fixed;inset:0;background:#10132299;backdrop-filter:blur(4px);z-index:20;align-items:center;justify-content:center;padding:18px}
+.backdrop.open{display:flex}
+.modal{background:white;width:min(550px,100%);border-radius:14px;padding:22px;max-height:90vh;overflow:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:center}
+.modal h2{font:700 20px 'Space Grotesk'}
+.close{border:0;background:#f3f3f7;border-radius:7px;width:30px;height:30px;font-size:20px}
+.modal form>label{display:block;font-size:9px;font-weight:bold;margin:14px 0 7px}
+textarea{width:100%;border:1px solid #e7e8ef;border-radius:8px;padding:12px;resize:vertical}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:9px}
+.modal input[type=datetime-local]{padding:9px;border:1px solid #e7e8ef;border-radius:7px}
+.modal-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;border-top:1px solid #eee;padding-top:15px;margin-top:18px}
+.modal-actions small{margin-right:auto;color:#999;font-size:8px}
+.connect-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.connect-grid button{padding:13px;border:1px solid #eee;border-radius:8px;background:white;text-align:left}
+.connect-grid button:hover{border-color:#a18cff;background:#faf9ff}
+.note{display:block;margin-top:14px;color:#888;font-size:8px;line-height:1.5}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);background:#22243a;color:white;padding:11px 16px;border-radius:8px;font-size:10px;opacity:0;transition:.2s;z-index:40}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.menu{display:none}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:780px){.sidebar{transform:translateX(-100%);transition:.25s}.sidebar.open{transform:translateX(0)}main{margin-left:0;padding:0 16px 28px}.menu{display:block;border:0;background:none;font-size:18px}.columns{grid-template-columns:1fr}.inbox{grid-template-columns:1fr}.messages{border:0}.media-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.welcome{align-items:flex-start;flex-direction:column;gap:12px}h1{font-size:22px}.top-right span{display:none}.calendar div{height:90px;padding:5px}.modal-actions{flex-wrap:wrap}.modal-actions small{width:100%}}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+<div class="brand"><b>K</b> kuadu<span>social</span></div>
+<div class="workspace"><i>KS</i><div><b>My workspace</b><small>Free workspace</small></div></div>
+<label>WORKSPACE</label>
+<nav>
+<button class="active" data-view="overview">▦　Overview</button>
+<button data-view="planner">▦　Content planner</button>
+<button data-view="inbox">✉　Unified inbox</button>
+<button data-view="analytics">▥　Analytics</button>
+<button data-view="library">▧　Media library</button>
+</nav>
+<div class="channels">
+<label>YOUR CHANNELS</label>
+<div id="channels"></div>
+<button class="add" id="connectButton">＋ Connect another channel</button>
+</div>
+<div class="side-bottom">
+<div class="help"><b>✦ Need a hand?</b><p>Explore tips to grow your audience.</p></div>
+<div class="user"><i>AD</i><div><b>Alex Doe</b><small>Account settings</small></div></div>
+</div>
+</aside>
+
+<main>
+<header>
+<div><button class="menu" id="menu">☰</button> Workspace　/　<b id="crumb">Overview</b></div>
+<div class="top-right"><span>◷　Today</span><button id="bell">♧</button><b class="avatar">AD</b></div>
+</header>
+
+<section id="overview" class="view show">
+<div class="welcome">
+<div><small class="eyebrow">YOUR SOCIAL MEDIA WORKSPACE</small><h1>Good morning, Alex ✦</h1><p>Here's what's happening across your social channels.</p></div>
+<button class="primary" id="create">＋ Create post</button>
+</div>
+<div class="stats">
+<article><small>Total followers</small><b>24,680</b><p><strong>↗ 8.4%</strong> vs last month</p></article>
+<article><small>Engagement rate</small><b>6.82%</b><p><strong>↗ 1.2%</strong> vs last month</p></article>
+<article><small>Post reach</small><b>182.4K</b><p><strong>↗ 12.6%</strong> vs last month</p></article>
+<article><small>Published posts</small><b id="published">38</b><p><strong>↗ 5 posts</strong> this month</p></article>
+</div>
+<div class="columns">
+<article class="panel">
+<div class="panel-head"><div><h2>Performance overview</h2><small>Track how your content is performing</small></div><select id="range"><option>Last 7 days</option><option>Last 30 days</option><option>Last 90 days</option></select></div>
+<div class="chart-total"><b id="total">48,290</b><strong>↗ 14.8%</strong><small>Total interactions</small></div>
+<div class="chart"><svg viewBox="0 0 700 150" preserveAspectRatio="none"><defs><linearGradient id="fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#8067f4" stop-opacity=".3"/><stop offset="1" stop-color="#8067f4" stop-opacity="0"/></linearGradient></defs><path fill="url(#fill)" d="M0 120 C50 120 60 70 110 90 S170 45 220 75 S280 30 330 55 S390 70 440 35 S500 50 550 25 S630 30 700 8 L700 150 L0 150Z"/><path d="M0 120 C50 120 60 70 110 90 S170 45 220 75 S280 30 330 55 S390 70 440 35 S500 50 550 25 S630 30 700 8" fill="none" stroke="#8067f4" stroke-width="3"/></svg></div>
+</article>
+<article class="panel">
+<div class="panel-head"><div><h2>Channel overview</h2><small>Your connected social accounts</small></div></div>
+<div id="channelStats"></div>
+<button class="add" id="connectButton2">＋ Connect another channel</button>
+</article>
+</div>
+<div class="columns">
+<article class="panel">
+<div class="panel-head"><h2>Recent posts</h2><small>Your latest content</small></div>
+<div class="post"><i class="thumb">✦</i><div><b>Building something new ✨</b><small>Instagram · Recent</small></div><em>Published</em></div>
+<div class="post"><i class="thumb">◈</i><div><b>5 tips for your next big idea</b><small>LinkedIn · Recent</small></div><em>Published</em></div>
+<div id="recentPosts"></div>
+</article>
+<article class="panel">
+<div class="panel-head"><h2>Coming up next</h2><small>Scheduled content</small></div>
+<div class="upcoming"><b>15<br><small>NOV</small></b><div><strong>Sunday motivation ✨</strong><small>Instagram · 9:00 AM</small></div><em>Scheduled</em></div>
+<div class="upcoming"><b>16<br><small>NOV</small></b><div><strong>Behind the scenes</strong><small>TikTok · 1:30 PM</small></div><em>Scheduled</em></div>
+<button class="add" id="schedule">＋ Schedule a post</button>
+</article>
+</div>
+</section>
+
+<section id="planner" class="view">
+<div class="title"><div><small class="eyebrow">PUBLISH WITH PURPOSE</small><h1>Content planner</h1><p>Plan and organise your social content.</p></div><button class="primary" id="create2">＋ Create post</button></div>
+<article class="panel"><h2>November 2026</h2><div class="calendar" id="calendar"></div></article>
+</section>
+
+<section id="inbox" class="view">
+<div class="title"><div><small class="eyebrow">ONE PLACE, EVERY CONVERSATION</small><h1>Unified inbox</h1><p>Manage messages and comments across your channels.</p></div></div>
+<article class="panel inbox">
+<div class="messages"><h2>Messages</h2>
+<button data-person="Maya Johnson">M　<b>Maya Johnson</b><small>Instagram · I love your latest post...</small></button>
+<button data-person="Kwame Mensah">K　<b>Kwame Mensah</b><small>Facebook · Available for a collab?</small></button>
+<button data-person="Sarah Lee">S　<b>Sarah Lee</b><small>LinkedIn · Thanks for sharing!</small></button>
+</div>
+<div class="conversation">
+<div class="conversation-head"><b id="person">Maya Johnson</b><small>Instagram · Active now</small></div>
+<div class="chat" id="chat"><p class="received">Hey! I love your latest post. The colours are amazing! 😊</p><p class="sent">Thank you so much! Really happy you liked it 💜</p><p class="received">Would you be interested in working on a project together?</p></div>
+<form id="reply"><input id="replyText" placeholder="Write a reply..."><button>➤</button></form>
+</div>
+</article>
+</section>
+
+<section id="analytics" class="view">
+<div class="title"><div><small class="eyebrow">THE NUMBERS BEHIND YOUR GROWTH</small><h1>Analytics</h1><p>Understand your audience and improve your strategy.</p></div><button class="outline" id="export">↓ Export report</button></div>
+<div class="stats">
+<article><small>Impressions</small><b>326.8K</b><p><strong>↗ 18.2%</strong> this month</p></article>
+<article><small>Profile visits</small><b>18,492</b><p><strong>↗ 9.7%</strong> this month</p></article>
+<article><small>Likes & reactions</small><b>12,840</b><p><strong>↗ 11.4%</strong> this month</p></article>
+<article><small>Link clicks</small><b>4,206</b><p><strong>↗ 6.3%</strong> this month</p></article>
+</div>
+<article class="panel growth"><h2>Audience growth</h2><small>Follower growth across all channels</small><div class="bars"><i style="height:38%"></i><i style="height:50%"></i><i style="height:45%"></i><i style="height:65%"></i><i style="height:57%"></i><i style="height:72%"></i><i style="height:67%"></i><i style="height:85%"></i><i style="height:79%"></i><i style="height:100%"></i><i style="height:91%"></i><i style="height:96%"></i></div></article>
+</section>
+
+<section id="library" class="view">
+<div class="title"><div><small class="eyebrow">YOUR CREATIVE WORKSPACE</small><h1>Media library</h1><p>Keep your images and creative assets organised.</p></div><label class="primary">＋ Upload media<input type="file" id="upload" accept="image/*,video/*" multiple hidden></label></div>
+<article class="panel"><h2>Your media</h2><div class="media-grid" id="mediaGrid"><div class="media">✦<small>creative-campaign.jpg</small></div><div class="media">◈<small>brand-pattern.png</small></div><div class="media">☀<small>weekend-vibes.jpg</small></div></div></article>
+</section>
+</main>
+
+<div class="backdrop" id="composer">
+<div class="modal">
+<div class="modal-head"><div><small class="eyebrow">MAKE SOMETHING GREAT</small><h2>Create a post</h2></div><button class="close" data-close>×</button></div>
+<form id="postForm">
+<label>Post caption</label>
+<textarea id="caption" rows="5" placeholder="What's on your mind? Share something with your audience..."></textarea>
+<label>Publish to</label>
+<div class="checks"><label><input type="checkbox" value="Instagram" checked> Instagram</label><label><input type="checkbox" value="Facebook" checked> Facebook</label><label><input type="checkbox" value="TikTok"> TikTok</label><label><input type="checkbox" value="LinkedIn"> LinkedIn</label></div>
+<label>Schedule</label><input type="datetime-local" id="when">
+<div class="modal-actions"><small>Demo mode · Saved in this browser</small><button type="button" class="outline" id="draft">Save draft</button><button class="primary">Schedule post ↗</button></div>
+</form>
+</div>
+</div>
+
+<div class="backdrop" id="connect">
+<div class="modal">
+<div class="modal-head"><div><small class="eyebrow">GROW YOUR REACH</small><h2>Connect a channel</h2></div><button class="close" data-close>×</button></div>
+<p>Choose a social network to add to your workspace.</p>
+<div class="connect-grid" id="connectGrid"></div>
+<small class="note">Demo mode: selecting a channel adds a sample connection. Real account access requires official platform OAuth and API approval.</small>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+function toast(message){let t=$("#toast");t.textContent=message;t.classList.add("show");clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove("show"),2500)}
+const names={overview:"Overview",planner:"Content planner",inbox:"Unified inbox",analytics:"Analytics",library:"Media library"};
+function go(view){$$(".view").forEach(x=>x.classList.toggle("show",x.id===view));$$("nav button").forEach(x=>x.classList.toggle("active",x.dataset.view===view));$("#crumb").textContent=names[view];$("#sidebar").classList.remove("open")}
+$$("nav button").forEach(b=>b.onclick=()=>go(b.dataset.view));
+$("#menu").onclick=()=>$("#sidebar").classList.toggle("open");
+function openModal(id){$("#"+id).classList.add("open")}
+function closeModals(){$$(".backdrop").forEach(x=>x.classList.remove("open"))}
+$$("[data-close]").forEach(b=>b.onclick=closeModals);
+$$(".backdrop").forEach(b=>b.onclick=e=>{if(e.target===b)closeModals()});
+["create","create2","schedule"].forEach(id=>$("#"+id).onclick=()=>openModal("composer"));
+["connectButton","connectButton2"].forEach(id=>$("#"+id).onclick=()=>openModal("connect"));
+
+const symbols={Instagram:"◎",Facebook:"f",TikTok:"♪",LinkedIn:"in",YouTube:"▶",X:"𝕏"};
+const platforms=Object.keys(symbols);
+let channels=JSON.parse(localStorage.getItem("kuaduChannels")||'["Instagram","Facebook","TikTok","LinkedIn"]');
+function renderChannels(){
+$("#channels").innerHTML=channels.map(p=>`<div>${symbols[p]}　${p}</div>`).join("");
+$("#channelStats").innerHTML=channels.map(p=>`<div class="channel"><i>${symbols[p]}</i><div><b>${p}</b><small>Connected account</small></div><strong>Active</strong><em>+5%</em></div>`).join("");
+}
+renderChannels();
+$("#connectGrid").innerHTML=platforms.map(p=>`<button data-platform="${p}">${symbols[p]}　${p}　＋</button>`).join("");
+$("#connectGrid").addEventListener("click",e=>{
+let b=e.target.closest("[data-platform]");
+if(!b)return;
+let p=b.dataset.platform;
+if(channels.includes(p)){toast(p+" is already connected.");return}
+channels.push(p);
+localStorage.setItem("kuaduChannels",JSON.stringify(channels));
+renderChannels();
+closeModals();
+toast(p+" demo connection added.");
+});
+
+let posts=JSON.parse(localStorage.getItem("kuaduPosts")||"[]");
+function savePost(status){
+let caption=$("#caption").value.trim();
+let chosen=$$(".checks input:checked").map(x=>x.value);
+if(!caption){toast("Please write a caption first.");return}
+if(!chosen.length){toast("Choose at least one channel.");return}
+posts.unshift({caption,chosen,status,date:new Date().toLocaleDateString()});
+localStorage.setItem("kuaduPosts",JSON.stringify(posts));
+$("#published").textContent=38+posts.length;
+$("#recentPosts").innerHTML=posts.slice(0,4).map(p=>`<div class="post"><i class="thumb">✦</i><div><b>${escapeHTML(p.caption)}</b><small>${p.chosen.join(", ")} · ${p.date}</small></div><em>${p.status}</em></div>`).join("");
+$("#caption").value="";
+closeModals();
+toast(status+" saved in your browser.");
+}
+function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+$("#postForm").onsubmit=e=>{e.preventDefault();savePost("Scheduled")};
+$("#draft").onclick=()=>savePost("Draft");
+
+$("#range").onchange=e=>{
+$("#total").textContent={"Last 7 days":"48,290","Last 30 days":"186,420","Last 90 days":"492,810"}[e.target.value];
+toast("Showing demo analytics.");
+};
+$("#bell").onclick=()=>toast("You're all caught up!");
+
+const people={
+"Maya Johnson":["Hey! I love your latest post. The colours are amazing! 😊","Thank you so much! Really happy you liked it 💜","Would you be interested in working on a project together?"],
+"Kwame Mensah":["Are you available for a collab? I have an idea I'd love to share."],
+"Sarah Lee":["Thanks for sharing this! Your insights were really helpful."]
+};
+$$(".messages button").forEach(b=>b.onclick=()=>{
+$("#person").textContent=b.dataset.person;
+$("#chat").innerHTML=people[b.dataset.person].map((m,i)=>`<p class="${i%2===0?"received":"sent"}">${escapeHTML(m)}</p>`).join("");
+});
+$("#reply").onsubmit=e=>{
+e.preventDefault();
+let value=$("#replyText").value.trim();
+if(!value)return;
+let p=document.createElement("p");
+p.className="sent";
+p.textContent=value;
+$("#chat").append(p);
+$("#replyText").value="";
+toast("Demo reply added.");
+};
+
+const days=["MON 9","TUE 10","WED 11","THU 12","FRI 13","SAT 14","SUN 15"];
+const events=["Content planning","Behind the scenes","Quick creator tip","","Weekend inspiration","Draft review","Sunday motivation"];
+$("#calendar").innerHTML=days.map((d,i)=>`<div>${d}<b>${i+9}</b>${events[i]?`<div class="event">${events[i]}<br><small>10:00 AM</small></div>`:""}</div>`).join("");
+
+$("#export").onclick=()=>{
+let data="KuaduSocial Analytics Report\nFollowers: 24,680\nEngagement: 6.82%\nReach: 182.4K\nPublished posts: "+$("#published").textContent;
+let a=document.createElement("a");
+a.href=URL.createObjectURL(new Blob([data],{type:"text/plain"}));
+a.download="kuadusocial-report.txt";
+a.click();
+URL.revokeObjectURL(a.href);
+toast("Demo report downloaded.");
+};
+
+$("#upload").onchange=e=>{
+[...e.target.files].forEach(f=>{
+let card=document.createElement("div");
+card.className="media";
+if(f.type.startsWith("image/")){
+let url=URL.createObjectURL(f);
+card.style.backgroundImage=`url(${url})`;
+card.style.backgroundSize="cover";
+card.style.backgroundPosition="center";
+}
+let label=document.createElement("small");
+label.textContent=f.name;
+card.append(label);
+$("#mediaGrid").prepend(card);
+});
+toast("Media added to the library.");
+e.target.value="";
+};
+
+const dt=new Date(Date.now()+3600000);
+dt.setMinutes(0,0,0);
+$("#when").value=new Date(dt-dt.getTimezoneOffset()*60000).toISOString().slice(0,16);
+</script>
+</body>
+</html>
